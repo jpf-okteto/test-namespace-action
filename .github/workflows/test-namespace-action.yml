@@ -1,0 +1,25 @@
+name: test-namespace-action
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Okteto context
+        uses: okteto/context@latest
+        with:
+          url: https://product.okteto.dev
+          token: ${{ secrets.OKTETO_TOKEN }}
+
+      - name: Activate namespace (branch under test)
+        id: namespace
+        uses: okteto/namespace@jpf-okteto/plat-1296
+
+      - name: Verify kubeconfig output is set
+        run: |
+          echo "kubeconfig path = ${{ steps.namespace.outputs.kubeconfig }}"
+          test -f "${{ steps.namespace.outputs.kubeconfig }}" && echo "kubeconfig file exists" || echo "kubeconfig file missing"
