@@ -18,6 +18,8 @@ jobs:
       - name: Activate namespace (branch under test)
         id: namespace
         uses: okteto/namespace@jpf-okteto/plat-1296
+        with:
+          namespace: jpf-okteto
 
       - name: Verify kubeconfig output is set
         run: |
